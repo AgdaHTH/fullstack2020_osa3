@@ -3,9 +3,10 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 
+app.use(cors())
 app.use(morgan('tiny'))
 app.use(express.json())
-app.use(cors())
+
 
 let persons = [
       { 
@@ -68,7 +69,7 @@ app.delete('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
   
   const body = request.body
-  console.log(body)
+  //console.log(body)
   if (!body.name) {
     return response.status(400).json({
       error: 'name missing'
@@ -106,7 +107,7 @@ app.post('/api/persons', (request, response) => {
 
 
 
-const port = process.env.PORT || 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Server running on port ${port}`)
+  console.log(`Server running on port ${PORT}`)
 })
