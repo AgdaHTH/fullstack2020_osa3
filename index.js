@@ -13,43 +13,13 @@ app.use(express.static('build'))
 app.use(morgan('tiny'))
 app.use(express.json())
 
-
-let persons = [
-      { 
-        "name": "Arto Hellas", 
-        "number": "040-123456",
-        "id": 1
-      },
-      { 
-        "name": "Ada Lovelace", 
-        "number": "39-44-5323523",
-        "id": 2
-      },
-      { 
-        "name": "Dan Abramov", 
-        "number": "12-43-234345",
-        "id": 3
-      },
-      { 
-        "name": "Mary Poppendieck", 
-        "number": "39-23-6423122",
-        "id": 4
-      }
-    ]
-
-const info = () => {
-    const date = new Date()
-    const info_response = `Phonebook has information for ${persons.length} persons`
-    return info_response + '<br></br>' + date
-}
-
 app.get('/', (req, res) => {
-    res.send('<h1>Hello You!</h1>')
+  res.send('<h1>Hello You!</h1>')
 })
 
 app.get('/api/persons', (request, response) => {
-  Person.find({}).then(persons => {  
-  response.json(persons)
+  Person.find({}).then(persons => {
+    response.json(persons)
   })
 })
 
@@ -60,7 +30,6 @@ app.get('/info', (request, response) => {
     console.log(date)
     response.send(`<div>Phonebook has information for ${persons} persons.<br></br>${date}</div>`)
   })
-  
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -72,12 +41,11 @@ app.get('/api/persons/:id', (request, response, next) => {
         response.status(404).end()
       }
     })
-      .catch(error => {
-        console.log(error)
-        next(error)
-      })
-
-  })
+    .catch(error => {
+      console.log(error)
+      next(error)
+    })
+})
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
@@ -87,10 +55,10 @@ app.delete('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 } )
 
-app.post('/api/persons', (request, response, next) => {  
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
   //console.log(body)
-  
+
   /*
   if (!body.number) { //vrt edellä
     return response.status(400).json({
@@ -98,7 +66,7 @@ app.post('/api/persons', (request, response, next) => {
     })
   }
  */
-  
+
   const person = new Person({
     name: body.name,
     number: body.number,
@@ -106,11 +74,10 @@ app.post('/api/persons', (request, response, next) => {
 
   console.log(person)
 
-  
   person.save().then(savedPerson => {
     response.json(savedPerson)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -126,7 +93,7 @@ app.put('/api/persons/:id', (request, response, next) => {
       response.json(updatedPerson)
     })
     .catch(error => next(error))
-}) 
+})
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
